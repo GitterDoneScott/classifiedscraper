@@ -8,6 +8,8 @@
 from scrapy.exceptions import DropItem
 from itemadapter import ItemAdapter
 import logging
+from tinydb import TinyDB, Query
+
 
 
 class ClassifiedscraperPipeline:
@@ -78,3 +80,28 @@ class KeywordFilterPipeline(object):
         if any(key in item['title'].lower() for key in self.keywords):
             raise DropItem('filter keyword found')
         return item
+
+
+class PersistancePipeline(object):
+    
+
+    def __init__(self, tiny_db):
+        self.tiny_db = tiny_db
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            tiny_db=crawler.settings.get('TINY_DB_FILE')
+        )
+
+    def open_spider(self, spider):
+        self.db = TinyDB(self.tiny_db)
+
+    def close_spider(self, spider):
+        logging.info("TinyDB Size " + str(len(self.db)))
+
+    def process_item(self, item, spider):
+        collection = Query()
+        self.db.upsert(dict(item), collection.title == item['title'])
+        return item
+

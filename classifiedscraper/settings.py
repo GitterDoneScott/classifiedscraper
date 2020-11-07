@@ -9,6 +9,8 @@
 
 #to be able to pull configuration from the environment
 import os
+#get project root
+from scrapy.utils.conf import closest_scrapy_cfg
 
 BOT_NAME = 'classifiedscraper'
 
@@ -94,8 +96,13 @@ ROBOTSTXT_OBEY = False
 
 ITEM_PIPELINES = {
     'classifiedscraper.pipelines.KeywordFilterPipeline': 200,
-    'classifiedscraper.pipelines.SendDiscordPipeline': 300,
+    'classifiedscraper.pipelines.PersistancePipeline': 300,
+    'classifiedscraper.pipelines.SendDiscordPipeline': 500,
 }
 
 
 DISCORD_NOTIFICATION_URL = os.environ.get('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
+
+proj_root = os.path.dirname(os.path.abspath(closest_scrapy_cfg()))
+TINY_DB_FILE = os.path.join(proj_root, 'tiny_db.json')
+
