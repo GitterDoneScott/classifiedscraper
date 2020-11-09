@@ -101,7 +101,8 @@ ITEM_PIPELINES = {
 }
 
 
-DISCORD_NOTIFICATION_URL = os.environ.get('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
+DISCORD_NOTIFICATION_URL = os.getenv('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
+
 
 proj_root = os.path.dirname(os.path.abspath(closest_scrapy_cfg()))
 TINY_DB_FILE = os.path.join(proj_root, 'tiny_db.json')
