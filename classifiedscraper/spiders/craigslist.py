@@ -17,7 +17,13 @@ class CraigslistSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://greenville.craigslist.org/search/bia?query=Release+%7C+Fluid+%7C+Stumpjumper+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Timberjack+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999'
+            'https://greenville.craigslist.org/search/bia?query=Release+%7C+Fluid+%7C+Stumpjumper+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Timberjack+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999',
+            'https://greenville.craigslist.org/d/for-sale/search/sss?sort=date&postal=29681&query=promaster%20%7C%20transit%20%7C%20sprinter%20-repair%20-optical&search_distance=100&srchType=T',
+            'https://greenville.craigslist.org/search/foa?query=%28car+%7C+auto+%7C+vehicle%29+lift+-kit&sort=date&srchType=T&search_distance=200&postal=29681',
+            'https://asheville.craigslist.org/search/foa?postal=29681&query=raft&search_distance=200&sort=rel',
+            'https://asheville.craigslist.org/d/general-for-sale/search/foa?sort=date&postal=29681&query=lathe&search_distance=200',
+            'https://asheville.craigslist.org/d/general-for-sale/search/foa?sort=date&postal=29681&query=bridgeport&search_distance=200',
+
         ]
         #dont_filter bypasses the duplicate url filter
         for url in urls:

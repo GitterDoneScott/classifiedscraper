@@ -9,6 +9,8 @@ from scrapy.exceptions import DropItem
 from itemadapter import ItemAdapter
 import logging
 from tinydb import TinyDB, Query
+from random import randint
+from time import sleep
 
 
 
@@ -70,6 +72,11 @@ class SendDiscordPipeline(object):
             webhook = DiscordWebhook( 
                 url=self.discord_url, content=content)
             response = webhook.execute()
+            #don't crush the webhook
+            sleep(randint(5, 30))
+            
+
+
 
 
 class KeywordFilterPipeline(object):
