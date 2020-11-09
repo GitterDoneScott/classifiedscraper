@@ -17,7 +17,7 @@ class CraigslistSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://greenville.craigslist.org/search/bia?query=Release+%7C+Roscoe+%7C+Fuse+%7C+Fluid+%7C+Stumpjumper+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Timberjack+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999'
+            'https://greenville.craigslist.org/search/bia?query=Release+%7C+Fluid+%7C+Stumpjumper+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Timberjack+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999'
         ]
         #dont_filter bypasses the duplicate url filter
         for url in urls:

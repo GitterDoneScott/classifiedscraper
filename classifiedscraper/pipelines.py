@@ -74,7 +74,7 @@ class SendDiscordPipeline(object):
 
 class KeywordFilterPipeline(object):
 
-    keywords = ['wanted', 'tandem', 'electric', 'cruiser', 'recumbent', 'trathalon', 'road']
+    keywords = ['wanted', 'tandem', 'electric', 'cruiser', 'recumbent', 'trathalon', 'road', '27.5']
 
     def process_item(self, item, spider):
         if any(key in item['title'].lower() for key in self.keywords):
@@ -98,10 +98,16 @@ class PersistancePipeline(object):
         self.db = TinyDB(self.tiny_db)
 
     def close_spider(self, spider):
-        logging.info("TinyDB Size " + str(len(self.db)))
+        logging.info('TinyDB Size: %s', str(len(self.db)))
 
     def process_item(self, item, spider):
         collection = Query()
-        self.db.upsert(dict(item), collection.title == item['title'])
-        return item
+        
+        if self.db.contains(collection.title == item['title']):
+            raise DropItem('Item already in database')
+        
+        #self.db.upsert(dict(item), collection.title == item['title'])
+        logging.info('Added to DB')
+        self.db.insert(dict(item))
 
+        return item
