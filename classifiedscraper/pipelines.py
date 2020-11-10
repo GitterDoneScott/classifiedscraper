@@ -110,7 +110,7 @@ class PersistancePipeline(object):
     def process_item(self, item, spider):
         collection = Query()
         
-        if self.db.contains(collection.title == item['title']):
+        if self.db.contains(collection['title'] == item['title']):
             raise DropItem('Item already in database')
         
         #self.db.upsert(dict(item), collection.title == item['title'])
