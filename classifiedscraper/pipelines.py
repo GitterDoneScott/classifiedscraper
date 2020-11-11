@@ -11,7 +11,7 @@ import logging
 from tinydb import TinyDB, Query
 from random import randint
 from time import sleep
-
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 
 class ClassifiedscraperPipeline:
@@ -51,28 +51,61 @@ class SendDiscordPipeline(object):
 
         def chunker(seq, size):
             return (seq[pos:pos + size] for pos in range(0, len(seq), size))
-
+        
+        webhook = DiscordWebhook(url=self.discord_url)
+        
+        #Discord message gets to large, break it up
         for group in chunker(items, 5):
             
-            # jinja template
-            from jinja2 import Template
-            template = Template(
-            """
-            {% for item in items %}
-[{{item['title']}}]({{item['link']}}) - {{item['price']}} - {{item['location']}}
-            {% endfor %}
-            """
-            )
+#             # jinja template
+#             from jinja2 import Template
+#             template = Template(
+#             """
+#             {% for item in items %}
+# [{{item['title']}}]({{item['link']}}) - {{item['price']}} - {{item['location']}}
+#             {% endfor %}
+#             """
+#             )
 
-            content = template.render(items=group)
-            logging.info("content: %s",content)
+#             content = template.render(items=group)
+#             logging.info("content: %s",content)
             
-            #send discord
-            from discord_webhook import DiscordWebhook
-            webhook = DiscordWebhook( 
-                url=self.discord_url, content=content)
-            response = webhook.execute()
+#             #send discord
+#             webhook = DiscordWebhook( 
+#                 url=self.discord_url, content=content)
+#             response = webhook.execute()
             #don't crush the webhook
+
+            for item in group:
+
+                # create embed object for webhook
+                embed = DiscordEmbed(title=item['title'], url=item['link'])
+
+                # set author
+                #embed.set_author(name='Classified Scraper')
+
+                # set image
+                if item['image_link'] != None:
+                    embed.set_image(url=item['image_link'])
+
+                    # set thumbnail
+                    # embed.set_thumbnail(url=item['image_link'])
+
+                # set timestamp (default is now)
+                #embed.set_timestamp()
+
+                # add fields to embed
+                if item['location'] != None:
+                  embed.add_embed_field(name='Location', value=item['location'])
+                if item['price'] != None:
+                  embed.add_embed_field(name='Price', value=item['price'])
+                if item['distance'] != None:
+                  embed.add_embed_field(name='Distance', value=item['distance'])
+
+                # add embed object to webhook
+                webhook.add_embed(embed)
+
+            response = webhook.execute()
             sleep(randint(5, 30))
             
 
@@ -80,8 +113,24 @@ class SendDiscordPipeline(object):
 
 
 class KeywordFilterPipeline(object):
+    #TODO: Externalize this list to a file
 
-    keywords = ['wanted', 'tandem', 'electric', 'cruiser', 'recumbent', 'trathalon', 'road', '27.5']
+    def __init__(self, setting):
+        self.keywords_file = setting
+
+        logging.info("keywords file: %s", self.keywords_file)
+
+        with open(self.keywords_file, "rt") as f:
+          self.keywords = [line.strip() for line in f.readlines()]
+
+        logging.info("keywords: %s", self.keywords)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            setting=crawler.settings.get('FILTER_KEYWORDS_FILE')
+        )
+
 
     def process_item(self, item, spider):
         if any(key in item['title'].lower() for key in self.keywords):
@@ -109,7 +158,7 @@ class PersistancePipeline(object):
 
     def process_item(self, item, spider):
         collection = Query()
-        
+        #TODO Check for price drops
         if self.db.contains(collection['title'] == item['title']):
             raise DropItem('Item already in database')
         

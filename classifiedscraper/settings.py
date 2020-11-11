@@ -103,7 +103,15 @@ ITEM_PIPELINES = {
 
 DISCORD_NOTIFICATION_URL = os.getenv('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(closest_scrapy_cfg()))
 
-proj_root = os.path.dirname(os.path.abspath(closest_scrapy_cfg()))
-TINY_DB_FILE = os.path.join(proj_root, 'tiny_db.json')
+TINY_DB_FILE = os.path.join(PROJECT_ROOT, 'tiny_db.json')
+
+CRAIGSLIST_URLS_FILE = os.path.join(PROJECT_ROOT, 'craigslist_urls.txt')
+
+PINKBIKE_URLS_FILE = os.path.join(PROJECT_ROOT, 'pinkbike_urls.txt')
+
+FILTER_KEYWORDS_FILE = os.path.join(PROJECT_ROOT, 'filter_keywords.txt')
+
+
 

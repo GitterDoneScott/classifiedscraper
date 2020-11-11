@@ -25,11 +25,15 @@ class ClassifiedscraperItem(scrapy.Item):
     title = scrapy.Field()
     price = scrapy.Field()
     link = scrapy.Field()
-    location = scrapy.Field(input_processor=MapCompose(parse_location))
+    location = scrapy.Field()
+    distance = scrapy.Field()
     description = scrapy.Field()
     image_link = scrapy.Field()
     pass
 
+    def set_all(self, value):
+        for keys, _ in self.fields.items():
+            self[keys] = value
 
 # @dataclass
 # class ClassifiedscraperItem:

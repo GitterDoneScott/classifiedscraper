@@ -10,29 +10,50 @@
 import scrapy
 from scrapy.utils.markup import remove_tags
 from ..items import ClassifiedscraperItem
+import logging
 
 
 class PinkbikeSpider(scrapy.Spider):
     name = "pinkbike"
 
+    def __init__(self, urls_file):
+        self.urls_file = urls_file
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            urls_file=crawler.settings.get('PINKBIKE_URLS_FILE')
+        )
+
     def start_requests(self):
-        urls = [
-            'https://www.pinkbike.com/buysell/list/?lat=35.0693&lng=-82.4023&distance=73&q=title:%20%22Release%22%20OR%20%22Fluid%22%20OR%20%E2%80%9CStumpjumper%E2%80%9D%20OR%20%22%20Spectral%22%20OR%20%22Trance%22%20OR%20%22Jeffsy%22%20OR%20%22Timberjack%22%20OR%20%22Meta%E2%80%9D%20%20OR%20%E2%80%9COrigin%E2%80%9D&wheelsize=10'
-        ]
-        #dont_filter bypasses the duplicate url filter
-        for url in urls:
+
+        logging.info("url file: %s", self.urls_file)
+
+        with open(self.urls_file, "rt") as f:
+          start_urls = [url.strip() for url in f.readlines()]
+
+         #dont_filter bypasses the duplicate url filter
+        for url in start_urls:
             yield scrapy.Request(url=url, callback=self.parse, dont_filter=True)
 
     def parse(self, response):
-        for item in response.css('div.bsitem > table  > tr > td:nth-child(2)'):
+        for item in response.css('div.bsitem > table  > tr'):
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
-            adItem['title'] = item.css('div > a::text').get(default='not-found')
-            adItem['link'] = item.css('div > a::attr(href)').get(default='not-found')
-            location_raw = remove_tags(item.css('table:nth-child(2) > tr > td').get(default='not-found')).strip()
+            adItem.set_all(None)
+            adItem['title'] = item.css(
+                'td:nth-child(2) > div > a::text').get(default='not-found')
+            adItem['link'] = item.css(
+                'td:nth-child(2) >div > a::attr(href)').get(default='not-found')
+            #csid2904951 > table > tbody > tr > td:nth-child(1) > ul > li > a > img
+            adItem['image_link'] = item.css(
+                'td:nth-child(1) > ul > li > a > img::attr(src)').get(default='not-found')
+            location_raw = remove_tags(item.css(
+                'td:nth-child(2) > table:nth-child(2) > tr > td').get(default='not-found')).strip()
             #remove ,state, country
             adItem['location'] = location_raw.split(",")[0]
-            price_raw = item.css('table:nth-child(2) > tr:nth-child(3) > td > b::text').get(default='not-found')
+            price_raw = item.css(
+                'td:nth-child(2) > table:nth-child(2) > tr:nth-child(3) > td > b::text').get(default='not-found')
             #remove USD
             adItem['price'] = price_raw.split(" ")[0]
             yield adItem
