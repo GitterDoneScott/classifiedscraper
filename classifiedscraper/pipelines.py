@@ -52,11 +52,11 @@ class SendDiscordPipeline(object):
         def chunker(seq, size):
             return (seq[pos:pos + size] for pos in range(0, len(seq), size))
         
-        webhook = DiscordWebhook(url=self.discord_url)
+        
         
         #Discord message gets to large, break it up
         for group in chunker(items, 5):
-            
+              
 #             # jinja template
 #             from jinja2 import Template
 #             template = Template(
@@ -77,7 +77,7 @@ class SendDiscordPipeline(object):
             #don't crush the webhook
 
             for item in group:
-
+                webhook = DiscordWebhook(url=self.discord_url)
                 # create embed object for webhook
                 embed = DiscordEmbed(title=item['title'], url=item['link'])
 
@@ -105,8 +105,8 @@ class SendDiscordPipeline(object):
                 # add embed object to webhook
                 webhook.add_embed(embed)
 
-            response = webhook.execute()
-            sleep(randint(5, 30))
+                response = webhook.execute()
+                sleep(randint(1, 10))
             
 
 

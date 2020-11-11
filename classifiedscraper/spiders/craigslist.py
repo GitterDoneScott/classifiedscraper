@@ -42,25 +42,24 @@ class CraigslistSpider(scrapy.Spider):
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
-            adItem['title'] = item.css('a.result-title.hdrlnk::text').get(default='not-found')
+            adItem['title'] = item.css('a.result-title.hdrlnk::text').get()
             adItem['link'] = item.css(
-                'a.result-title.hdrlnk::attr(href)').get(default='not-found')
+                'a.result-title.hdrlnk::attr(href)').get()
             #sortable-results > ul > li:nth-child(1) > a > div.swipe > div > div:nth-child(1) > img
             #sortable-results > ul > li:nth-child(2) > a > img
             #// *[ @ id = "sortable-results"] / ul / li[1] / a / div[1] / div / div[1] / img
             #/html/body/section/form/div[4]/ul/li[1]/a/div[1]/div/div[1]/img
             #this is loaded by JS. Need to either render js or pull up ad
-            adItem['image_link'] = item.css('img.hoverZoomLink::attr(src)').get(default='not-found')
+            adItem['image_link'] = item.css('img.hoverZoomLink::attr(src)').get()
             
             
-            adItem['location'] = item.css('span.nearby::text').get(
-                default='not-found')
+            adItem['location'] = item.css('span.nearby::text').get()
 
             
             adItem['price'] = item.css(
-                'span.result-price::text').get(default='not-found')
+                'span.result-price::text').get()
             
             #sortable-results > ul > li:nth-child(2) > div > span.result-meta > span.result-tags > span.maptag
             adItem['distance'] = item.css(
-                'span.maptag::text').get(default='not-found')
+                'span.maptag::text').get()
             yield adItem

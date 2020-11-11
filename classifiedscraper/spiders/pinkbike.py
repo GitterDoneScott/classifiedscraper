@@ -42,18 +42,18 @@ class PinkbikeSpider(scrapy.Spider):
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
             adItem['title'] = item.css(
-                'td:nth-child(2) > div > a::text').get(default='not-found')
+                'td:nth-child(2) > div > a::text').get()
             adItem['link'] = item.css(
-                'td:nth-child(2) >div > a::attr(href)').get(default='not-found')
+                'td:nth-child(2) >div > a::attr(href)').get()
             #csid2904951 > table > tbody > tr > td:nth-child(1) > ul > li > a > img
             adItem['image_link'] = item.css(
-                'td:nth-child(1) > ul > li > a > img::attr(src)').get(default='not-found')
+                'td:nth-child(1) > ul > li > a > img::attr(src)').get()
             location_raw = remove_tags(item.css(
-                'td:nth-child(2) > table:nth-child(2) > tr > td').get(default='not-found')).strip()
+                'td:nth-child(2) > table:nth-child(2) > tr > td').get()).strip()
             #remove ,state, country
             adItem['location'] = location_raw.split(",")[0]
             price_raw = item.css(
-                'td:nth-child(2) > table:nth-child(2) > tr:nth-child(3) > td > b::text').get(default='not-found')
+                'td:nth-child(2) > table:nth-child(2) > tr:nth-child(3) > td > b::text').get()
             #remove USD
             adItem['price'] = price_raw.split(" ")[0]
             yield adItem
