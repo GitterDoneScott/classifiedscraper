@@ -50,16 +50,40 @@ class CraigslistSpider(scrapy.Spider):
             #// *[ @ id = "sortable-results"] / ul / li[1] / a / div[1] / div / div[1] / img
             #/html/body/section/form/div[4]/ul/li[1]/a/div[1]/div/div[1]/img
             #this is loaded by JS. Need to either render js or pull up ad
-            adItem['image_link'] = item.css('img.hoverZoomLink::attr(src)').get()
-            
-            
+            #adItem['image_link'] = item.css('img.hoverZoomLink::attr(src)').get()
+                 
             adItem['location'] = item.css('span.nearby::text').get()
-
-            
+   
             adItem['price'] = item.css(
                 'span.result-price::text').get()
             
             #sortable-results > ul > li:nth-child(2) > div > span.result-meta > span.result-tags > span.maptag
             adItem['distance'] = item.css(
                 'span.maptag::text').get()
-            yield adItem
+
+            request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
+            request.meta['adItem'] = adItem
+
+            yield request
+
+    def parse_detail_page(self, response):
+        
+        adItem = response.meta['adItem']
+        adItem['image_link'] = response.css('img[alt="1"]::attr(src)').get()
+        
+        yield adItem
+
+
+# def parse_page1(self, response):
+#     item = MyItem()
+#     item['main_url'] = response.url
+#     request = scrapy.Request("http://www.example.com/some_page.html",
+#                              callback=self.parse_page2)
+#     request.meta['item'] = item
+#     yield request
+
+
+# def parse_page2(self, response):
+#     item = response.meta['item']
+#     item['other_url'] = response.url
+#     yield item
