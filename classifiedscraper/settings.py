@@ -59,7 +59,9 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
 #    'classifiedscraper.middlewares.ClassifiedscraperDownloaderMiddleware': 543,
+#     'scrapy_selenium.SeleniumMiddleware': 800,
 #}
+    
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -108,10 +110,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(closest_scrapy_cfg()))
 TINY_DB_FILE = os.path.join(PROJECT_ROOT, 'tiny_db.json')
 
 CRAIGSLIST_URLS_FILE = os.path.join(PROJECT_ROOT, 'craigslist_urls.txt')
-
 PINKBIKE_URLS_FILE = os.path.join(PROJECT_ROOT, 'pinkbike_urls.txt')
+FACEBOOK_URLS_FILE = os.path.join(PROJECT_ROOT, 'facebook_urls.txt')
+
 
 FILTER_KEYWORDS_FILE = os.path.join(PROJECT_ROOT, 'filter_keywords.txt')
-
-
 

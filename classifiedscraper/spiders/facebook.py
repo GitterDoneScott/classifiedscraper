@@ -4,35 +4,62 @@
 # pipenv install requests-html
 # pipenv shell
 # scrapy startproject <project>
-# scrapy crawl facebook
-# scrapy shell "https://www.facebook.com/marketplace/105581819474182/bicycles?minPrice=999&maxPrice=3000&exact=false"
+# scrapy crawl <project>
+# scrapy shell <url>
 
 import scrapy
-from scrapy.utils.markup import remove_tags
 from ..items import ClassifiedscraperItem
+import logging
+from w3lib.html import remove_tags
+import re
+import furl
 
 
 class FacebookSpider(scrapy.Spider):
     name = "facebook"
 
+    def __init__(self, urls_file):
+        self.urls_file = urls_file
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            urls_file=crawler.settings.get('FACEBOOK_URLS_FILE')
+        )
+
     def start_requests(self):
-        urls = [
-            'https://www.pinkbike.com/buysell/list/?lat=35.0693&lng=-82.4023&distance=73&q=title:%20%22Release%22%20OR%20%22Roscoe%22%20OR%20%22Fuse%22%20OR%20%22Fluid%22%20OR%20%E2%80%9CStumpjumper%E2%80%9D%20OR%20%22%20Spectral%22%20OR%20%22Trance%22%20OR%20%22Jeffsy%22%20OR%20%22Timberjack%22%20OR%20%22Meta%E2%80%9D%20%20OR%20%E2%80%9COrigin%E2%80%9D&wheelsize=10'
-        ]
-        #dont_filter bypasses the duplicate url filter
-        for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse, dont_filter=True)
+
+        logging.info("url file: %s", self.urls_file)
+
+        with open(self.urls_file, "rt") as f:
+          start_urls = [url.strip() for url in f.readlines()]
+
+         #dont_filter bypasses the duplicate url filter
+        for url in start_urls:
+            yield scrapy.Request(url=url, meta={'dont_redirect': True}, callback=self.parse, dont_filter=True)
+            #yield SeleniumRequest(url=url, meta={'dont_redirect': True}, callback=self.parse)
 
     def parse(self, response):
-        for item in response.css('div.bsitem > table  > tr > td:nth-child(2)'):
+        
+        for item in response.xpath("//a[contains(@href, '/marketplace/item/')]/../../.."):
+            #find the links to items
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
-            adItem['title'] = item.css('div > a::text').get(default='not-found')
-            adItem['link'] = item.css('div > a::attr(href)').get(default='not-found')
-            location_raw = remove_tags(item.css('table:nth-child(2) > tr > td').get(default='not-found')).strip()
-            #remove ,state, country
-            adItem['location'] = location_raw.split(",")[0]
-            price_raw = item.css('table:nth-child(2) > tr:nth-child(3) > td > b::text').get(default='not-found')
-            #remove USD
-            adItem['price'] = price_raw.split(" ")[0]
+            adItem.set_all(None)
+            #response.request.url
+            request_url_base = furl.furl(response.request.url).origin
+            link_raw = item.xpath(
+                "//a[contains(@href, '/marketplace/item/')]/@href").get()
+            link_raw = furl.furl(link_raw).remove(
+                args=True, fragment=True).url
+            adItem['link'] = request_url_base + link_raw
+            adItem['price'] = remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get())
+            title_raw = remove_tags(item.get())
+
+            adItem['title'] = re.sub("^\$\d+", "", title_raw)
+
+            image_link_raw = item.css('img').xpath('@src').get()
+            #image_link_raw = furl.furl(image_link_raw).remove(args=True,fragment=True).url
+            adItem['image_link'] = image_link_raw
+
             yield adItem

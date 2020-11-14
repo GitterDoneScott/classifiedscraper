@@ -133,8 +133,11 @@ class KeywordFilterPipeline(object):
 
 
     def process_item(self, item, spider):
-        if any(key in item['title'].lower() for key in self.keywords):
-            raise DropItem('filter keyword found')
+        try:
+            if any(key in item['title'].lower() for key in self.keywords):
+                raise DropItem('filter keyword found')
+        except Exception:
+            pass
         return item
 
 

@@ -8,7 +8,7 @@
 # scrapy shell "https://greenville.craigslist.org/search/bia?query=Release+%7C+Roscoe+%7C+Fuse+%7C+Fluid+%7C+Stumpjumper+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Timberjack+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999"
 
 import scrapy
-from scrapy.utils.markup import remove_tags
+from w3lib.html import remove_tags
 from ..items import ClassifiedscraperItem
 import logging
 
@@ -62,28 +62,14 @@ class CraigslistSpider(scrapy.Spider):
                 'span.maptag::text').get()
 
             request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
+            #pass the current adItem to the request
             request.meta['adItem'] = adItem
 
             yield request
-
+    
     def parse_detail_page(self, response):
-        
+        #parse the ad detail page
         adItem = response.meta['adItem']
         adItem['image_link'] = response.css('img[alt="1"]::attr(src)').get()
         
         yield adItem
-
-
-# def parse_page1(self, response):
-#     item = MyItem()
-#     item['main_url'] = response.url
-#     request = scrapy.Request("http://www.example.com/some_page.html",
-#                              callback=self.parse_page2)
-#     request.meta['item'] = item
-#     yield request
-
-
-# def parse_page2(self, response):
-#     item = response.meta['item']
-#     item['other_url'] = response.url
-#     yield item
