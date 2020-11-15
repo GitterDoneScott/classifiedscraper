@@ -1,3 +1,3 @@
-tiny_db.json
-.gitignore
-.git
+**/tiny_db.json
+**/.gitignore
+**/.git
