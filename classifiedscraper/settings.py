@@ -69,12 +69,6 @@ ROBOTSTXT_OBEY = False
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
 
-# Configure item pipelines
-# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'classifiedscraper.pipelines.ClassifiedscraperPipeline': 300,
-#}
-
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 AUTOTHROTTLE_ENABLED = True
@@ -101,7 +95,6 @@ ITEM_PIPELINES = {
     'classifiedscraper.pipelines.PersistancePipeline': 300,
     'classifiedscraper.pipelines.SendDiscordPipeline': 500,
 }
-
 
 DISCORD_NOTIFICATION_URL = os.getenv('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
 
