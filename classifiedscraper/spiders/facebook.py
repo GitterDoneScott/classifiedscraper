@@ -49,7 +49,7 @@ class FacebookSpider(scrapy.Spider):
             #response.request.url
             request_url_base = furl.furl(response.request.url).origin
             link_raw = item.xpath(
-                "//a[contains(@href, '/marketplace/item/')]/@href").get()
+                ".//a[contains(@href, '/marketplace/item/')]/@href").get()
             link_raw = furl.furl(link_raw).remove(
                 args=True, fragment=True).url
             adItem['link'] = request_url_base + link_raw
