@@ -42,6 +42,7 @@ class CraigslistSpider(scrapy.Spider):
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
+            adItem['source'] = self.name
             adItem['title'] = item.css('a.result-title.hdrlnk::text').get()
             adItem['link'] = item.css(
                 'a.result-title.hdrlnk::attr(href)').get()

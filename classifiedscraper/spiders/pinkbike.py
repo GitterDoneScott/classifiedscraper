@@ -41,6 +41,7 @@ class PinkbikeSpider(scrapy.Spider):
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
+            adItem['source'] = self.name
             adItem['title'] = item.css(
                 'td:nth-child(2) > div > a::text').get()
             adItem['link'] = item.css(

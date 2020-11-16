@@ -46,6 +46,7 @@ class FacebookSpider(scrapy.Spider):
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
+            adItem['source'] = self.name
             #response.request.url
             request_url_base = furl.furl(response.request.url).origin
             link_raw = item.xpath(

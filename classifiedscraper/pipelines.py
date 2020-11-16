@@ -92,7 +92,7 @@ class SendDiscordPipeline(object):
                     # embed.set_thumbnail(url=item['image_link'])
 
                 # set timestamp (default is now)
-                #embed.set_timestamp()
+                embed.set_timestamp()
 
                 # add fields to embed
                 if item['location'] != None:
@@ -101,6 +101,9 @@ class SendDiscordPipeline(object):
                   embed.add_embed_field(name='Price', value=item['price'])
                 if item['distance'] != None:
                   embed.add_embed_field(name='Distance', value=item['distance'])
+                if item['source'] != None:
+                  embed.add_embed_field(name='Source', value=item['source'])
+
 
                 # add embed object to webhook
                 webhook.add_embed(embed)

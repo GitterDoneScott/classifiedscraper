@@ -29,6 +29,7 @@ class ClassifiedscraperItem(scrapy.Item):
     distance = scrapy.Field()
     description = scrapy.Field()
     image_link = scrapy.Field()
+    source = scrapy.Field()
     pass
 
     def set_all(self, value):
