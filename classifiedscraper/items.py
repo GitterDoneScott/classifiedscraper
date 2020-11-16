@@ -30,6 +30,7 @@ class ClassifiedscraperItem(scrapy.Item):
     description = scrapy.Field()
     image_link = scrapy.Field()
     source = scrapy.Field()
+    post_date = scrapy.Field()
     pass
 
     def set_all(self, value):

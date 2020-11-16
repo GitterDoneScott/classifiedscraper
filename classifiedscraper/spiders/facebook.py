@@ -42,6 +42,7 @@ class FacebookSpider(scrapy.Spider):
     def parse(self, response):
         
         for item in response.xpath("//a[contains(@href, '/marketplace/item/')]/../../.."):
+            
             #find the links to items
             #self.logger.info("Found:", item)
             adItem = ClassifiedscraperItem()
@@ -49,18 +50,32 @@ class FacebookSpider(scrapy.Spider):
             adItem['source'] = self.name
             #response.request.url
             request_url_base = furl.furl(response.request.url).origin
-            link_raw = item.xpath(
-                ".//a[contains(@href, '/marketplace/item/')]/@href").get()
-            link_raw = furl.furl(link_raw).remove(
-                args=True, fragment=True).url
+            link_raw = item.xpath(".//a[contains(@href, '/marketplace/item/')]/@href").get()
+            link_raw = furl.furl(link_raw).remove(args=True, fragment=True).url
             adItem['link'] = request_url_base + link_raw
+            #price lives in a seperate span..lets hope it begins with a $
             adItem['price'] = remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get())
+            #concatenate the whole div tag...
             title_raw = remove_tags(item.get())
-
-            adItem['title'] = re.sub("^\$\d+", "", title_raw)
-
+            #remove leading non-alphabetic characters
+            adItem['title'] = re.sub("^[^a-zA-Z]*", "", title_raw)
             image_link_raw = item.css('img').xpath('@src').get()
             #image_link_raw = furl.furl(image_link_raw).remove(args=True,fragment=True).url
             adItem['image_link'] = image_link_raw
 
+            if adItem['link'] is not None:
+              #pass the current adItem to the request if a detail link exists
+              request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
+              request.meta['adItem'] = adItem
+              yield request
             yield adItem
+    def parse_detail_page(self, response):
+        
+        #parse the ad detail page
+        adItem = response.meta['adItem']
+        #look for a div with the '·'
+        raw_location_post_date = response.xpath(".//div[contains(text(), '·')]/text()").get()
+        adItem['location'] = raw_location_post_date.split('·')[0].strip()
+        adItem['post_date'] = post_date_raw = raw_location_post_date.split('·')[1].strip()
+
+        yield adItem

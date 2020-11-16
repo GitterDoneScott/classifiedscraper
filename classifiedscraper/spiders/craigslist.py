@@ -34,7 +34,7 @@ class CraigslistSpider(scrapy.Spider):
         
          #dont_filter bypasses the duplicate url filter
         for url in start_urls:
-            yield scrapy.Request(url=url, callback=self.parse, dont_filter=True)
+            yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
 
@@ -44,8 +44,7 @@ class CraigslistSpider(scrapy.Spider):
             adItem.set_all(None)
             adItem['source'] = self.name
             adItem['title'] = item.css('a.result-title.hdrlnk::text').get()
-            adItem['link'] = item.css(
-                'a.result-title.hdrlnk::attr(href)').get()
+            adItem['link'] = item.css('a.result-title.hdrlnk::attr(href)').get()
             #sortable-results > ul > li:nth-child(1) > a > div.swipe > div > div:nth-child(1) > img
             #sortable-results > ul > li:nth-child(2) > a > img
             #// *[ @ id = "sortable-results"] / ul / li[1] / a / div[1] / div / div[1] / img
@@ -62,11 +61,13 @@ class CraigslistSpider(scrapy.Spider):
             adItem['distance'] = item.css(
                 'span.maptag::text').get()
 
-            request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
-            #pass the current adItem to the request
-            request.meta['adItem'] = adItem
+            if adItem['link'] is not None:
+                  #pass the current adItem to the request if a detail link exists
+              request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
+              request.meta['adItem'] = adItem
+              yield request
 
-            yield request
+            yield adItem
     
     def parse_detail_page(self, response):
         #parse the ad detail page
