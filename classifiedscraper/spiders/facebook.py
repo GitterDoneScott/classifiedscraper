@@ -67,6 +67,7 @@ class FacebookSpider(scrapy.Spider):
               #pass the current adItem to the request if a detail link exists
               request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
               request.meta['adItem'] = adItem
+              request.meta['dont_redirect']= True
               yield request
             yield adItem
     def parse_detail_page(self, response):
@@ -75,7 +76,8 @@ class FacebookSpider(scrapy.Spider):
         adItem = response.meta['adItem']
         #look for a div with the '·'
         raw_location_post_date = response.xpath(".//div[contains(text(), '·')]/text()").get()
-        adItem['location'] = raw_location_post_date.split('·')[0].strip()
-        adItem['post_date'] = post_date_raw = raw_location_post_date.split('·')[1].strip()
+        if raw_location_post_date is not None:
+          adItem['location'] = raw_location_post_date.split('·')[0].strip()
+          adItem['post_date'] = post_date_raw = raw_location_post_date.split('·')[1].strip()
 
         yield adItem
