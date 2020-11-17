@@ -12,6 +12,7 @@ from tinydb import TinyDB, Query
 from random import randint
 from time import sleep
 from discord_webhook import DiscordWebhook, DiscordEmbed
+import urllib.parse
 
 
 class ClassifiedscraperPipeline:
@@ -103,7 +104,9 @@ class SendDiscordPipeline(object):
                   embed.add_embed_field(name='Distance', value=item['distance'])
                 if item['source'] != None:
                   embed.add_embed_field(name='Source', value=item['source'])
-
+                
+                embed.add_embed_field(
+                    name='Web Search', value="[Google](https://www.google.com/search?q=" + urllib.parse.quote(item['title']) + ")")
 
                 # add embed object to webhook
                 webhook.add_embed(embed)
