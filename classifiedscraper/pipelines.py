@@ -97,7 +97,9 @@ class SendDiscordPipeline(object):
 
                 # add fields to embed
                 if item['location'] != None:
-                  embed.add_embed_field(name='Location', value=item['location'])
+                  #https://www.google.com/maps/search/?api=1&query=centurylink+field
+                  embed.add_embed_field(
+                  name='Location', value="[" + item['location'] + "](https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(item['location']) + ")" )
                 if item['price'] != None:
                   embed.add_embed_field(name='Price', value=item['price'])
                 if item['distance'] != None:
@@ -106,7 +108,7 @@ class SendDiscordPipeline(object):
                   embed.add_embed_field(name='Source', value=item['source'])
                 
                 embed.add_embed_field(
-                    name='Web Search', value="[Google](https://www.google.com/search?q=" + urllib.parse.quote(item['title']) + ")")
+                    name='Web', value="[Google](https://www.google.com/search?q=" + urllib.parse.quote(item['title']) + ")")
 
                 # add embed object to webhook
                 webhook.add_embed(embed)
