@@ -99,16 +99,17 @@ class SendDiscordPipeline(object):
                 if item['location'] != None:
                   #https://www.google.com/maps/search/?api=1&query=centurylink+field
                   embed.add_embed_field(
-                  name='Location', value="[" + item['location'] + "](https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(item['location']) + ")" )
+                  name='Location', value="[" + str(item['location']) + "](https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(str(item['location'])) + ")" )
                 if item['price'] != None:
-                  embed.add_embed_field(name='Price', value=item['price'])
+                  embed.add_embed_field(name='Price', value=str(item['price']))
                 if item['distance'] != None:
-                  embed.add_embed_field(name='Distance', value=item['distance'])
+                  embed.add_embed_field(name='Distance', value=str(item['distance']))
                 if item['source'] != None:
-                  embed.add_embed_field(name='Source', value=item['source'])
+                  embed.add_embed_field(
+                      name='Source', value="[" + str(item['source']) + "](" + str(item['source_link']) + ")")
                 
                 embed.add_embed_field(
-                    name='Web', value="[Google](https://www.google.com/search?q=" + urllib.parse.quote(item['title']) + ")")
+                    name='Web', value="[Google](https://www.google.com/search?q=" + str(urllib.parse.quote(item['title'])) + ")")
 
                 # add embed object to webhook
                 webhook.add_embed(embed)
