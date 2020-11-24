@@ -3,7 +3,7 @@ https://greenville.craigslist.org/search/foa?query=%28car+%7C+auto+%7C+vehicle%2
 https://asheville.craigslist.org/search/foa?query=raft&sort=rel&search_distance=200&postal=29681&min_price=499
 https://asheville.craigslist.org/d/general-for-sale/search/foa?sort=date&postal=29681&query=lathe&search_distance=200
 https://asheville.craigslist.org/d/general-for-sale/search/foa?sort=date&postal=29681&query=bridgeport&search_distance=200
-https://greenville.craigslist.org/search/bia?query=Release+%7C+Fluid+%7C+Stumpjumper+%7C+%22stump+jumper%22+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Timberjack+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999&bicycle_type=8&bicycle_wheel_size=14
+https://greenville.craigslist.org/search/bia?query=Release+%7C+Fluid+%7C+Stumpjumper+%7C+%22stump+jumper%22+%7C+Spectral+%7C+Trance+%7C+Jeffsy+%7C+Meta+%7C+Origin&sort=rel&search_distance=150&postal=29681&min_price=999&bicycle_type=8&bicycle_wheel_size=14
 https://greenville.craigslist.org/d/for-sale/search/sss?sort=date&postal=29681&query=canoe&search_distance=100
 https://greenville.craigslist.org/search/sss?query=%22surf+board%22+%7C+surfboard+%7C+%22paddle+board%22+%7C+sup+-fingerlings+-printer+-wakeboard+-modem+-table+-trailer&sort=date&search_distance=100&postal=29681&max_price=2001
 https://greenville.craigslist.org/search/sss?query=tractor+%7C+skidsteer+%7C+bobcat+%7C%22skid+steer%22&sort=date&srchType=T&search_distance=100&postal=29681&min_price=9999&max_price=39999
