@@ -154,6 +154,8 @@ class PersistancePipeline(object):
             found_item = self.db.get(collection['title'] == item['title'])
             try:
                 delta_time_last_seen = datetime.now() - dateutil.parser.parse(found_item['scraped_date'])
+                logging.info(
+                    'item last seen %s days ago', str(delta_time_last_seen.days))
                 if delta_time_last_seen.days < 14:
                     logging.info("item seen recently")
                     #drop the item as we've seen it recently
@@ -175,7 +177,8 @@ class PersistancePipeline(object):
 
             
         #self.db.upsert(dict(item), collection.title == item['title'])
-        logging.info('Added to DB')
-        self.db.insert(dict(item))
+        else:
+            logging.info('Added to DB')
+            self.db.insert(dict(item))
 
         return item
