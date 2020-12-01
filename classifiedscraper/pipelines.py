@@ -13,6 +13,8 @@ from random import randint
 from time import sleep
 from discord_webhook import DiscordWebhook, DiscordEmbed
 import urllib.parse
+from datetime import datetime, timedelta
+import dateutil.parser
 
 
 class ClassifiedscraperPipeline:
@@ -58,25 +60,6 @@ class SendDiscordPipeline(object):
         #Discord message gets to large, break it up
         for group in chunker(items, 5):
               
-#             # jinja template
-#             from jinja2 import Template
-#             template = Template(
-#             """
-#             {% for item in items %}
-# [{{item['title']}}]({{item['link']}}) - {{item['price']}} - {{item['location']}}
-#             {% endfor %}
-#             """
-#             )
-
-#             content = template.render(items=group)
-#             logging.info("content: %s",content)
-            
-#             #send discord
-#             webhook = DiscordWebhook( 
-#                 url=self.discord_url, content=content)
-#             response = webhook.execute()
-            #don't crush the webhook
-
             for item in group:
                 webhook = DiscordWebhook(url=self.discord_url)
                 # create embed object for webhook
@@ -118,11 +101,7 @@ class SendDiscordPipeline(object):
                 sleep(randint(1, 10))
             
 
-
-
-
 class KeywordFilterPipeline(object):
-    #TODO: Externalize this list to a file
 
     def __init__(self, setting):
         self.keywords_file = setting
@@ -172,8 +151,29 @@ class PersistancePipeline(object):
         collection = Query()
         #TODO Check for price drops
         if self.db.contains(collection['title'] == item['title']):
-            raise DropItem('Item already in database')
-        
+            found_item = self.db.get(collection['title'] == item['title'])
+            try:
+                delta_time_last_seen = datetime.now() - dateutil.parser.parse(found_item['scraped_date'])
+                if delta_time_last_seen.days < 14:
+                    logging.info("item seen recently")
+                    #drop the item as we've seen it recently
+                    raise DropItem('recently seen item already in database')
+                else:
+                    logging.info('item not seen recently, updating item scraped date')
+                    self.db.update(
+                        {'scraped_date': str(datetime.now())}, collection['title'] == item['title'])
+
+            except KeyError:
+                logging.info('scraped_date key does not exist, adding now as the scraped date')
+                self.db.update(
+                    {'scraped_date': str(datetime.now())}, collection['title'] == item['title'])
+            except TypeError:
+                logging.info(
+                    'scraped_date is not a string or date, adding now as the scraped date')
+                self.db.update(
+                    {'scraped_date': str(datetime.now())}, collection['title'] == item['title'])
+
+            
         #self.db.upsert(dict(item), collection.title == item['title'])
         logging.info('Added to DB')
         self.db.insert(dict(item))

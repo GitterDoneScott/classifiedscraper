@@ -6,6 +6,7 @@
 from dataclasses import dataclass
 from scrapy.loader.processors import MapCompose, TakeFirst
 import scrapy
+from datetime import datetime
 
 
 def parse_location(text):
@@ -32,11 +33,13 @@ class ClassifiedscraperItem(scrapy.Item):
     source = scrapy.Field()
     post_date = scrapy.Field()
     source_link = scrapy.Field()
+    scraped_date = scrapy.Field()
     pass
 
     def set_all(self, value):
         for keys, _ in self.fields.items():
             self[keys] = value
+        self['scraped_date'] = str(datetime.now())
 
 # @dataclass
 # class ClassifiedscraperItem:
