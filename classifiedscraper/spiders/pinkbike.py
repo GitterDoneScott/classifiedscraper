@@ -8,7 +8,7 @@
 # scrapy shell "https://www.pinkbike.com/buysell/list/?lat=34.8646&lng=-82.0469&distance=150&q=title:%20Jeffsy%20OR%20trance%20OR%20frame&wheelsize=10"
 
 import scrapy
-from scrapy.utils.markup import remove_tags
+from w3lib.html import remove_tags
 from ..items import ClassifiedscraperItem
 import logging
 
