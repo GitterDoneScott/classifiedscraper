@@ -57,11 +57,36 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'classifiedscraper.middlewares.ClassifiedscraperDownloaderMiddleware': 543,
-#     'scrapy_selenium.SeleniumMiddleware': 800,
-#}
-    
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
+    'classifiedscraper.middlewares.ClassifiedscraperDownloaderMiddleware': None,
+    'scrapy_selenium.SeleniumMiddleware': None,
+    'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
+    'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
+    'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
+    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 400,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
+    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+    'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
+    'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+}
+
+FAKEUSERAGENT_PROVIDERS = [
+    # this is the first provider we'll try
+    'scrapy_fake_useragent.providers.FakeUserAgentProvider',
+    # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
+    'scrapy_fake_useragent.providers.FakerProvider',
+    # fall back to USER_AGENT value
+    'scrapy_fake_useragent.providers.FixedUserAgentProvider',
+]
+
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
