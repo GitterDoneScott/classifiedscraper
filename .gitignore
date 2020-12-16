@@ -1,1 +1,3 @@
 **/tiny_db.json
+.DS_Store
+data/tiny_db.json.sav
