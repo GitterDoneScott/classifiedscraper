@@ -1,4 +1,4 @@
-FROM python:3.7.0
+FROM python:3.9.1
 
 WORKDIR /usr/src/app
 RUN apt-get update && apt-get -y install cron vim && apt-get clean

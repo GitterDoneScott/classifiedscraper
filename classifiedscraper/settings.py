@@ -13,7 +13,8 @@ import os
 from scrapy.utils.conf import closest_scrapy_cfg
 
 BOT_NAME = 'classifiedscraper'
-
+LOG_LEVEL='DEBUG'
+LOG_STDOUT='True'
 SPIDER_MODULES = ['classifiedscraper.spiders']
 NEWSPIDER_MODULE = 'classifiedscraper.spiders'
 
@@ -44,10 +45,17 @@ ROBOTSTXT_OBEY = False
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-#DEFAULT_REQUEST_HEADERS = {
-#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-#   'Accept-Language': 'en',
-#}
+# DEFAULT_REQUEST_HEADERS = {
+#    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+#    'Connection:' : 'keep-alive',
+#    'Upgrade-Insecure-Requests': '1',
+#    'Accept-Encoding': 'gzip, deflate, br',
+#    'sec-ch-ua-mobile': '?0',
+#    'Sec-Fetch-Site': 'none',
+#    'Sec-Fetch-Mode': 'navigate',
+#    'Sec-Fetch-Dest': 'document',
+#    'Accept-Language': 'en-US,en;q=0.9',
+# }
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
@@ -76,6 +84,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
     'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
     'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+    'classifiedscraper.middlewares.HeaderDebugDownloadMiddleware':901,
 }
 
 FAKEUSERAGENT_PROVIDERS = [
@@ -118,7 +127,7 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = .1
 ITEM_PIPELINES = {
     'classifiedscraper.pipelines.KeywordFilterPipeline': 200,
     'classifiedscraper.pipelines.PersistancePipeline': 300,
-    'classifiedscraper.pipelines.SendDiscordPipeline': 500,
+    'classifiedscraper.pipelines.SendDiscordPipeline': None,
 }
 
 DISCORD_NOTIFICATION_URL = os.getenv('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
@@ -137,3 +146,7 @@ EBAY_URLS_FILE = os.path.join(PROJECT_ROOT, 'ebay_urls.txt')
 
 FILTER_KEYWORDS_FILE = os.path.join(PROJECT_ROOT, 'filter_keywords.txt')
 
+#DOWNLOADER_CLIENT_TLS_CIPHERS='TLS_RSA_WITH_RC4_128_SHA'
+#this seemed to fix the craigslist 403 issue...why?
+DOWNLOADER_CLIENT_TLS_METHOD='TLSv1.0'
+DOWNLOADER_CLIENT_TLS_VERBOSE_LOGGING=True

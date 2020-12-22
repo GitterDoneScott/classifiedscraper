@@ -7,6 +7,8 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+import logging
+import json
 
 
 class ClassifiedscraperSpiderMiddleware:
@@ -100,4 +102,36 @@ class ClassifiedscraperDownloaderMiddleware:
         pass
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        spider.logger.info('Spider opened: ', spider.name)
+
+class HeaderDebugDownloadMiddleware:
+
+    def process_request(self, request, spider):
+        # Called for each request that goes through the downloader
+        # middleware.
+
+        # Must either:
+        # - return None: continue processing this request
+        # - or return a Response object
+        # - or return a Request object
+        # - or raise IgnoreRequest: process_exception() methods of
+        #   installed downloader middleware will be called
+
+        def decode_dict(d):
+            result = {}
+            for key, value in d.items():
+                if isinstance(key, bytes):
+                    key = key.decode()
+                if isinstance(value, bytes):
+                    value = value.decode()
+                    logging.info('value:',value)
+                elif isinstance(value, dict):
+                    result.update({key: value})
+            return result
+
+        #logging.info("request headers: ", json.dumps(decode_dict(request.headers), indent=4, sort_keys=False)) 
+        #logging.info("request headers: ", str(request.headers)) 
+        return None
+
+
+

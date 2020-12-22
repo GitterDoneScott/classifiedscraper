@@ -1,3 +1,14 @@
 **/tiny_db.json
 .DS_Store
 data/tiny_db.json.sav
+classifiedscraper/__pycache__/__init__.cpython-39.pyc
+classifiedscraper/__pycache__/items.cpython-39.pyc
+classifiedscraper/__pycache__/middlewares.cpython-39.pyc
+classifiedscraper/__pycache__/pipelines.cpython-39.pyc
+classifiedscraper/__pycache__/settings.cpython-39.pyc
+classifiedscraper/spiders/__pycache__/ebay.cpython-39.pyc
+classifiedscraper/spiders/__pycache__/craigslist.cpython-39.pyc
+classifiedscraper/spiders/__pycache__/facebook.cpython-39.pyc
+classifiedscraper/spiders/__pycache__/pinkbike.cpython-39.pyc
+.gitignore
+classifiedscraper/spiders/__pycache__/__init__.cpython-39.pyc
