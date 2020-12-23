@@ -127,7 +127,7 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = .1
 ITEM_PIPELINES = {
     'classifiedscraper.pipelines.KeywordFilterPipeline': 200,
     'classifiedscraper.pipelines.PersistancePipeline': 300,
-    'classifiedscraper.pipelines.SendDiscordPipeline': None,
+    'classifiedscraper.pipelines.SendDiscordPipeline': 500,
 }
 
 DISCORD_NOTIFICATION_URL = os.getenv('SCRAPY_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
