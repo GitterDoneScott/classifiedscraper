@@ -11,7 +11,9 @@ echo "SHELL=/bin/bash" >> ${CRON_FILE}
 echo "BASH_ENV=${ENV_VARS_FILE}" >> ${CRON_FILE}
 echo "* * * * * echo 'Cron is alive!' > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
 #list crawlers and run them sequentially with xargs
-echo "0 */2 * * * cd /usr/src/app && /usr/local/bin/scrapy list| xargs -n 1 /usr/local/bin/scrapy crawl > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
+#scrapy list stopped working with python 3.9.1
+#echo "0 */2 * * * cd /usr/src/app && /usr/local/bin/scrapy list| xargs -n 1 /usr/local/bin/scrapy crawl > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
+echo "0 */2 * * * cd /usr/src/app && echo 'facebook pinkbike ebay craigslist' | xargs -n 1 /usr/local/bin/scrapy crawl > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
 #echo "0 * * * * cd /usr/src/app && /usr/local/bin/scrapy crawl pinkbike > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
 #echo "0 * * * * cd /usr/src/app && /usr/local/bin/scrapy crawl craigslist > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
 #echo "0 * * * * cd /usr/src/app && /usr/local/bin/scrapy crawl facebook > /proc/1/fd/1 2>/proc/1/fd/2" >> ${CRON_FILE}
