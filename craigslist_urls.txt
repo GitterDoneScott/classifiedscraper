@@ -8,3 +8,4 @@ https://greenville.craigslist.org/d/for-sale/search/sss?sort=date&postal=29681&q
 https://greenville.craigslist.org/search/sss?query=%22surf+board%22+%7C+surfboard+%7C+%22paddle+board%22+%7C+sup+-fingerlings+-printer+-wakeboard+-modem+-table+-trailer&sort=date&search_distance=100&postal=29681&max_price=2001
 https://greenville.craigslist.org/search/sss?query=tractor+%7C+skidsteer+%7C+bobcat+%7C%22skid+steer%22&sort=date&srchType=T&search_distance=100&postal=29681&min_price=9999&max_price=39999
 https://greenville.craigslist.org/search/foa?postal=29681&query=(car%20%7C%20auto%20%7C%20vehicle)%20lift%20-kit&search_distance=100&sort=rel&srchType=T
+https://asheville.craigslist.org/d/general-for-sale/search/foa?sort=date&postal=29681&query=yakima&search_distance=200
