@@ -13,5 +13,5 @@ https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&it
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=499&keywords=bridgeport
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=250&keywords=lathe
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=99&keywords=woodworking
-https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&keywords=yakima
+https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&keywords=yakima+holdup
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&keywords=honda+pilot+console
