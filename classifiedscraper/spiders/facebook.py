@@ -29,7 +29,7 @@ class FacebookSpider(scrapy.Spider):
 
     def start_requests(self):
 
-        logging.info("url file: %s", self.urls_file)
+        logging.info("url file: " + self.urls_file)
 
         with open(self.urls_file, "rt") as f:
           start_urls = [url.strip() for url in f.readlines()]
