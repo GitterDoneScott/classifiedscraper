@@ -11,6 +11,7 @@
 import os
 #get project root
 from scrapy.utils.conf import closest_scrapy_cfg
+#from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 BOT_NAME = 'classifiedscraper'
 LOG_LEVEL='DEBUG'
@@ -45,46 +46,36 @@ ROBOTSTXT_OBEY = False
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-# DEFAULT_REQUEST_HEADERS = {
-#    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-#    'Connection:' : 'keep-alive',
-#    'Upgrade-Insecure-Requests': '1',
-#    'Accept-Encoding': 'gzip, deflate, br',
-#    'sec-ch-ua-mobile': '?0',
-#    'Sec-Fetch-Site': 'none',
-#    'Sec-Fetch-Mode': 'navigate',
-#    'Sec-Fetch-Dest': 'document',
-#    'Accept-Language': 'en-US,en;q=0.9',
-# }
-
-# Enable or disable spider middlewares
-# See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'classifiedscraper.middlewares.ClassifiedscraperSpiderMiddleware': 543,
-#}
+DEFAULT_REQUEST_HEADERS = {
+   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8',
+   'Connection:' : 'close',
+#   'Accept-Encoding': 'gzip, deflate, br',
+   'Accept-Language': 'en-us',
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 410,
+    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 420,
     'classifiedscraper.middlewares.ClassifiedscraperDownloaderMiddleware': None,
-    'scrapy_selenium.SeleniumMiddleware': None,
     'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
     'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
     'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
-    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 400,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 450,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 400,
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
-    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': None,
+    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': None,
     'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
-    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': None,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
     'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
     'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
-    'classifiedscraper.middlewares.HeaderDebugDownloadMiddleware':901,
+    'classifiedscraper.middlewares.HeaderDebugDownloadMiddleware':None,
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 }
 
 FAKEUSERAGENT_PROVIDERS = [
@@ -133,7 +124,6 @@ ITEM_PIPELINES = {
 DISCORD_NOTIFICATION_URL = os.getenv('CLASSIFIEDSCRAPER_DISCORD_NOTIFICATION_URL', 'NOT FOUND')
 EBAY_APP_ID = os.getenv('EBAY_APP_ID', 'NOT FOUND')
 
-
 PROJECT_ROOT = os.path.dirname(os.path.abspath(closest_scrapy_cfg()))
 
 TINY_DB_FILE = os.path.join(PROJECT_ROOT, 'data', 'tiny_db.json')
@@ -150,3 +140,22 @@ FILTER_KEYWORDS_FILE = os.path.join(PROJECT_ROOT, 'filter_keywords.txt')
 #this seemed to fix the craigslist 403 issue...why?
 DOWNLOADER_CLIENT_TLS_METHOD='TLSv1.2'
 DOWNLOADER_CLIENT_TLS_VERBOSE_LOGGING=True
+
+#pip install git+https://github.com/ly95/scrapy-headless.git
+#pip install git+https://github.com/canada4663/scrapy-headless.git
+
+# SELENIUM_GRID_URL = 'http://localhost:4444/wb/hub' 
+# SELENIUM_NODES = 1  # Number of nodes(browsers) you are running on your grid
+# SELENIUM_CAPABILITIES = DesiredCapabilities.FIREFOX
+
+# DOWNLOAD_HANDLERS = {
+#     "http": "scrapy_headless.HeadlessDownloadHandler",
+#     "https": "scrapy_headless.HeadlessDownloadHandler",
+# }
+
+SPLASH_URL = 'http://splash:8050'
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
