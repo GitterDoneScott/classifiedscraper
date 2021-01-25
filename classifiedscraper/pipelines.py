@@ -98,7 +98,8 @@ class SendDiscordPipeline(object):
                 webhook.add_embed(embed)
 
                 response = webhook.execute()
-                sleep(randint(1, 10))
+                #10,000 per 10 minutes per discord api docs
+                sleep(0.25)
             
 
 class KeywordFilterPipeline(object):
