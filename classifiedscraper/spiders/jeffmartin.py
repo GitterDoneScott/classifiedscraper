@@ -25,27 +25,43 @@ class JeffMartinSpider(scrapy.Spider):
 
     def parse(self, response):
         
-        for item in response.xpath("//*[@class='upcoming-item-a']"):
-            location= item.xpath(".//span[contains(@class,'upcoming-info')]/text()").get()    
+        for item in response.xpath("//div[@class='auction  ']"):
+            logging.debug('item:' + str(item))
+            location= item.xpath("normalize-space(.//div[contains(@class,'auctionLocation')]/span)").get()  
+            logging.debug('Location:'+ str(location))  
             # filter non SC items
-            if not bool(re.search('SC', location)):
-                #print('SC NOT found')
+            if not ( bool(re.search('SC', location)) or bool(re.search('South Carolina', location)) ):
+                logging.debug('SC NOT found: ')
                 continue
 
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
             adItem['source'] = self.name
+            adItem['location'] = location
+
             #response.request.url
             request_url_base = furl.furl(response.request.url).origin
-            link_raw = item.xpath("./@href").get()
-            adItem['link'] = request_url_base + link_raw
-            adItem['title'] = item.xpath("normalize-space(.//span[@class='upcoming-title'])").get()
-            adItem['location'] = location
-            raw_post_date = item.xpath("normalize-space(.//span[contains(@class,'upcoming-date')])").get()
-            adItem['post_date'] = raw_post_date.split('ST')[0].strip()
-            adItem['description'] = item.xpath("normalize-space(.//div[@class='col-sm-12'])").get()
+            logging.debug('request_url_base:'+ request_url_base)
+            link_raw = item.xpath(".//a/@href").get(default='/not-found')
+            item_link = request_url_base + link_raw
+            logging.debug('link:'+ item_link)
+            adItem['link'] = item_link
+
+            title_raw = remove_tags(item.xpath("normalize-space(.//p[@class='auctionTitle'])").get())
+            logging.debug('title_raw:'  + title_raw)
+            adItem['title'] = title_raw
+
+            #image_link_raw = remove_tags(item.xpath(".//img/@src").get())
+            #logging.debug('image_link_raw: ' + image_link_raw)
+            #adItem['image_link'] = image_link_raw
+
+            #raw_post_date = item.xpath("normalize-space(.//div[contains(@class,'auctionLocation')]/span)").get()
+            #logging.debug('raw_post_date:'  + raw_post_date)
+            #adItem['post_date'] = raw_post_date.split('ST')[0].strip()
             
-
-
+            #raw_desc = item.xpath("normalize-space(.//div[@class='col-sm-12'])").get()
+            #logging.debug('raw_post_date:'  + raw_post_date)
+            #adItem['description'] = raw_desc
+            
             yield adItem
     
