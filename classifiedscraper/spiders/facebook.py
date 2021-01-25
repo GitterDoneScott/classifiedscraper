@@ -86,23 +86,29 @@ class FacebookSpider(scrapy.Spider):
             link_raw = furl.furl(link_raw).remove(args=True, fragment=True).url
             item_link = request_url_base + link_raw
             logging.debug('link:'+ item_link)
-            #adItem['link'] = request_url_base + link_raw
+            adItem['link'] = item_link
+
             #price lives in a seperate span..lets hope it begins with a $
             item_price = remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get())
             logging.debug('Price:' + item_price)
-            #adItem['price'] = remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get())
-            #print('price: '+ remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get()))
+            adItem['price'] = item_price
+
             #concatenate the whole div tag...
             title_raw = remove_tags(item.xpath(".//img/@alt").get())
             logging.debug('title_raw:'  + title_raw)
             item_title = title_raw.split(' in ')[0]
             logging.debug('title:' + item_title)
+            adItem['title'] = item_title
+
             item_location=title_raw.split(' in ')[1]
             logging.debug('location:' +item_location )
+            adItem['location'] = item_location
+
             image_link_raw = remove_tags(item.xpath(".//img/@src").get())
             logging.debug('image_link_raw: ' + image_link_raw)
-            #adItem['image_link'] = image_link_raw
-            #print('image link: ' + image_link_raw)
+            adItem['image_link'] = image_link_raw
+            
+            yield adItem
         
         # for item in response.xpath("//a[contains(@href, '/marketplace/item/')]/../../.."):
             
