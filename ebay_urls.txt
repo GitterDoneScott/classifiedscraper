@@ -1,8 +1,3 @@
-https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=999&keywords=diamondback+release
-https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=999&keywords=stumpjumper
-https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=999&keywords=Canyon+Spectral
-https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=999&keywords=giant+trance
-https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=999&keywords=COMMENCAL+Meta
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=99&keywords=liquid+shredder
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=99&keywords=canoe+kayak
 https://svcs.ebay.com/services/search/FindingService/v1?buyerPostalCode=29681&itemFilter(0).name=MaxDistance&itemFilter(0).value=200&itemFilter(1).name=MinPrice&itemFilter(1).value=199&keywords=standup+paddleboard
