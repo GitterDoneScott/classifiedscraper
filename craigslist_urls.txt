@@ -6,3 +6,4 @@ https://greenville.craigslist.org/d/for-sale/search/sss?sort=date&postal=29681&q
 https://greenville.craigslist.org/search/sss?query=%22surf+board%22+%7C+surfboard+%7C+%22paddle+board%22+%7C+sup+-fingerlings+-printer+-wakeboard+-modem+-table+-trailer&sort=date&search_distance=100&postal=29681&max_price=2001
 https://asheville.craigslist.org/d/general-for-sale/search/foa?sort=date&postal=29681&query=yakima&search_distance=200
 https://greenville.craigslist.org/search/cta?query=bus+%7C+ambulance&sort=date&purveyor-input=all&srchType=T&search_distance=100&postal=29681&min_price=1000
+https://greenville.craigslist.org/search/cta?query=transfer+%7C+tank&sort=date&purveyor-input=all&srchType=T&search_distance=100&postal=29681&min_price=1000
