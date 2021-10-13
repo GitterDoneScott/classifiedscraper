@@ -6,3 +6,5 @@ services:
     restart: unless-stopped
     expose:
       - 8050
+    #ports:
+    #  - 8050:8050 #local run

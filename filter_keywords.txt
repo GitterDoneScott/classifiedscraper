@@ -8,3 +8,4 @@ connect
 passenger
 slab
 live edge
+low roof

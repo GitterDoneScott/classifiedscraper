@@ -47,6 +47,7 @@ class SendDiscordPipeline(object):
 
         if len(items) > 0:
             self.items_cache = []  # reset cache to empty
+            logging.debug("Items to notify: " + str(len(items)))
             self._send_notification(items)
 
 
@@ -61,7 +62,7 @@ class SendDiscordPipeline(object):
         for group in chunker(items, 5):
               
             for item in group:
-                webhook = DiscordWebhook(url=self.discord_url)
+                webhook = DiscordWebhook(url=self.discord_url, rate_limit_retry=True)
                 # create embed object for webhook
                 embed = DiscordEmbed(title=item['title'], url=item['link'])
 
@@ -89,24 +90,30 @@ class SendDiscordPipeline(object):
                   embed.add_embed_field(name='Distance', value=str(item['distance']))
                 if item['source'] != None:
                   embed.add_embed_field(
-                      name='Source', value="[" + str(item['source']) + "](" + str(item['source_link']) + ")")
-                
+                      #name='Source', value="[" + str(item['source']) + "](" + str(item['source_link']) + ")")
+                      name='Source', value=str(item['source']))
                 embed.add_embed_field(
-                    name='Web', value="[Google](https://www.google.com/search?q=" + str(urllib.parse.quote(item['title'])) + ")")
+                    name='Web Search', value="[Google](https://www.google.com/search?q=" + str(urllib.parse.quote(item['title'])) + ")")
 
                 # add embed object to webhook
                 webhook.add_embed(embed)
-
-                response = webhook.execute()
+                
+                #logging.debug("Discord webhook: " + str(webhook.json))
+                
+                try:
+                    response = webhook.execute()
+                except Timeout as err:
+                    logging.error("Connection to Discord timed out: {err}")
+                
                 #10,000 per 10 minutes per discord api docs
-                sleep(0.25)
+                #sleep(0.75)
             
 
 class KeywordFilterPipeline(object):
 
     def __init__(self, setting):
         self.keywords_file = setting
-
+``
         logging.info("keywords file: %s", self.keywords_file)
 
         with open(self.keywords_file, "rt") as f:
@@ -153,33 +160,34 @@ class PersistancePipeline(object):
         #TODO Check for price drops
         if self.db.contains(collection['title'] == item['title']):
             found_item = self.db.get(collection['title'] == item['title'])
+            logging.debug('Found Item in DB: ' +  found_item['title'])
             try:
                 delta_time_last_seen = datetime.now() - dateutil.parser.parse(found_item['scraped_date'])
                 logging.info(
                     'item last seen %s days ago', str(delta_time_last_seen.days))
                 if delta_time_last_seen.days < 14:
-                    logging.info("item seen recently")
+                    logging.info("item seen recently: " + item['title'])
                     #drop the item as we've seen it recently
-                    raise DropItem('recently seen item already in database')
+                    raise DropItem('recently seen item already in database: ' + item['title'])
                 else:
-                    logging.info('item not seen recently, updating item scraped date')
+                    logging.info('item not seen recently, updating item scraped date: '+ item['title'])
                     self.db.update(
                         {'scraped_date': str(datetime.now())}, collection['title'] == item['title'])
 
             except KeyError:
-                logging.info('scraped_date key does not exist, adding now as the scraped date')
+                logging.info('scraped_date key does not exist, adding now as the scraped date: '+ item['title'])
                 self.db.update(
                     {'scraped_date': str(datetime.now())}, collection['title'] == item['title'])
             except TypeError:
                 logging.info(
-                    'scraped_date is not a string or date, adding now as the scraped date')
+                    'scraped_date is not a string or date, adding now as the scraped date:' + item['title'])
                 self.db.update(
                     {'scraped_date': str(datetime.now())}, collection['title'] == item['title'])
 
             
         #self.db.upsert(dict(item), collection.title == item['title'])
         else:
-            logging.info('Added to DB')
+            logging.info('Added to DB: '+ item['title'])
             self.db.insert(dict(item))
 
         return item

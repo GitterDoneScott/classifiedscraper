@@ -58,11 +58,12 @@ class CraigslistSpider(scrapy.Spider):
     def parse(self, response):
         
         for item in response.css('li.result-row'):
-            #self.logger.info("Found:", item)
+            
             adItem = ClassifiedscraperItem()
             adItem.set_all(None)
             adItem['source'] = self.name
             adItem['title'] = item.css('a.result-title.hdrlnk::text').get()
+            logging.debug('item: ' + str(adItem['title']))
             adItem['link'] = item.css('a.result-title.hdrlnk::attr(href)').get()
             #sortable-results > ul > li:nth-child(1) > a > div.swipe > div > div:nth-child(1) > img
             #sortable-results > ul > li:nth-child(2) > a > img
@@ -81,11 +82,14 @@ class CraigslistSpider(scrapy.Spider):
                 'span.maptag::text').get()
 
             if adItem['link'] is not None:
-                  #pass the current adItem to the request if a detail link exists
+              #pass the current adItem to the request if a detail link exists
               request = scrapy.Request(adItem['link'], callback=self.parse_detail_page)
               request.meta['adItem'] = adItem
               yield request
-
+              logging.debug('Skipping add item bc detail page exists ' + str(adItem['title']))
+              continue
+            
+            logging.debug('add item bc detail page DOES NOT EXIST ' + str(adItem['title']))
             yield adItem
     
     def parse_detail_page(self, response):

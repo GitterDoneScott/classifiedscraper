@@ -13,3 +13,6 @@ classifiedscraper/spiders/__pycache__/pinkbike.cpython-39.pyc
 .gitignore
 classifiedscraper/spiders/__pycache__/__init__.cpython-39.pyc
 classifiedscraper/spiders/__pycache__/jeffmartin.cpython-39.pyc
+.venv
+.vscode
+**/*.env

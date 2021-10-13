@@ -14,7 +14,7 @@ from scrapy.utils.conf import closest_scrapy_cfg
 #from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 BOT_NAME = 'classifiedscraper'
-LOG_LEVEL='DEBUG'
+LOG_LEVEL='ERROR'
 LOG_STDOUT='True'
 SPIDER_MODULES = ['classifiedscraper.spiders']
 NEWSPIDER_MODULE = 'classifiedscraper.spiders'

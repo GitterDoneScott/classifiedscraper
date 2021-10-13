@@ -45,21 +45,20 @@ class FacebookSpider(scrapy.Spider):
 
         for url in start_urls:
             #import web_pdb; web_pdb.set_trace()
+``
+            yield scrapy.Request(url=url, meta = {'dont_redirect': True,'handle_httpstatus_list': [302]}, callback=self.parse)
+            # yield SplashRequest(url, self.parse,
+            #         args={
+            #             # optional; parameters passed to Splash HTTP API
+            #             'wait': 5,
 
-            #yield scrapy.Request(url=url, meta = {'dont_redirect': True,'handle_httpstatus_list': [302]}, callback=self.parse, headers=headers)
-            #yield HeadlessRequest(url=url, callback=self.parse)
-            yield SplashRequest(url, self.parse,
-                    args={
-                        # optional; parameters passed to Splash HTTP API
-                        'wait': 5,
-
-                        # 'url' is prefilled from request url
-                        # 'http_method' is set to 'POST' for POST requests
-                        # 'body' is set to request body for POST requests
-                    },
-                    #endpoint='render.html', # optional; default is render.html
-                    slot_policy=SlotPolicy.SINGLE_SLOT,  # optional
-                )
+            #             # 'url' is prefilled from request url
+            #             # 'http_method' is set to 'POST' for POST requests
+            #             # 'body' is set to request body for POST requests
+            #         },
+            #         #endpoint='render.html', # optional; default is render.html
+            #         slot_policy=SlotPolicy.SINGLE_SLOT,  # optional
+            #     )
  
 
     def parse(self, response):

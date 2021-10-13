@@ -27,7 +27,7 @@ class JeffMartinSpider(scrapy.Spider):
         
         for item in response.xpath("//div[@class='auction  ']"):
             logging.debug('item:' + str(item))
-            location= item.xpath("normalize-space(.//div[contains(@class,'auctionLocation')]/span)").get()  
+            location= item.xpath("normalize-space(.//button[contains(@class,'location-link')])").get()  
             logging.debug('Location:'+ str(location))  
             # filter non SC items
             if not ( bool(re.search('SC', location)) or bool(re.search('South Carolina', location)) ):
