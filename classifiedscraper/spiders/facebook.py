@@ -45,7 +45,6 @@ class FacebookSpider(scrapy.Spider):
 
         for url in start_urls:
             #import web_pdb; web_pdb.set_trace()
-``
             yield scrapy.Request(url=url, meta = {'dont_redirect': True,'handle_httpstatus_list': [302]}, callback=self.parse)
             # yield SplashRequest(url, self.parse,
             #         args={

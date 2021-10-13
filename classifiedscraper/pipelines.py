@@ -113,7 +113,6 @@ class KeywordFilterPipeline(object):
 
     def __init__(self, setting):
         self.keywords_file = setting
-``
         logging.info("keywords file: %s", self.keywords_file)
 
         with open(self.keywords_file, "rt") as f:
