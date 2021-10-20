@@ -87,7 +87,11 @@ class FacebookSpider(scrapy.Spider):
             adItem['link'] = item_link
 
             #price lives in a seperate span..lets hope it begins with a $
-            item_price = remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get())
+            try: 
+              item_price = remove_tags(item.xpath(".//span[starts-with(text(), '$')]").get())
+            except Exception as err:
+                    logging.error("Failed to find price for : " + item_link + " : " + str(err))
+                    item_price='Not Found' 
             logging.debug('Price:' + item_price)
             adItem['price'] = item_price
 

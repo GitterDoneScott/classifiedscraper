@@ -103,7 +103,7 @@ class SendDiscordPipeline(object):
                 try:
                     response = webhook.execute()
                 except Timeout as err:
-                    logging.error("Connection to Discord timed out: {err}")
+                    logging.error("Connection to Discord timed out: " + str(err))
                 
                 #10,000 per 10 minutes per discord api docs
                 #sleep(0.75)
@@ -130,9 +130,13 @@ class KeywordFilterPipeline(object):
     def process_item(self, item, spider):
         try:
             if any(key in item['title'].lower() for key in self.keywords):
-                raise DropItem('filter keyword found')
-        except Exception:
-            pass
+                raise DropItem('Dropping item. filter keyword found: '+ item['title'])
+        except DropItem:
+            logging.debug('Dropping item. filter keyword found in item: ' + item['title'])
+            raise
+        except Exception as err:
+            logging.error("filter keyword exception in item : " + item['title']+ " " + str(err))
+            raise
         return item
 
 
