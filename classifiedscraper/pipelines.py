@@ -160,6 +160,7 @@ class PersistancePipeline(object):
 
     def process_item(self, item, spider):
         collection = Query()
+        #TODO add source and location to item DB key or the link url
         #TODO Check for price drops
         if self.db.contains(collection['title'] == item['title']):
             found_item = self.db.get(collection['title'] == item['title'])
